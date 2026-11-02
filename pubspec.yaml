@@ -43,6 +43,7 @@ dependencies:
   file_picker: ^13.3.2
   wakelock_plus: ^1.8.2
   firebase_ai: ^5.1.0
+  firebase_app_check: ^0.5.1
 
 dev_dependencies:
   flutter_test:

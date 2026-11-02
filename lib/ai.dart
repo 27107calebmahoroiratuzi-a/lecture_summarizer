@@ -79,6 +79,9 @@ String aiErrorMessage(Object error) {
     // no connection: the phone could not reach the server
     return 'No internet. The recording is kept on your phone. '
         'Tap Retry when you are back online.';
+  } else if (error.toString().contains('App Check')) {
+    return 'Firebase App Check rejected this copy of the app. '
+        'Register its debug token in the Firebase console, then tap Retry.';
   } else if (error is ServerException) {
     return 'The AI service had a problem: ${error.message}';
   } else {
