@@ -42,6 +42,7 @@ dependencies:
   path_provider: ^2.1.6
   file_picker: ^13.3.2
   wakelock_plus: ^1.8.2
+  firebase_ai: ^5.1.0
 
 dev_dependencies:
   flutter_test:

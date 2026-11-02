@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'consent_screen.dart';
 import 'database.dart';
 import 'format.dart';
+import 'lecture_screen.dart';
+import 'processing_screen.dart';
 import 'theme.dart';
 
 // Screen 03: the lectures of one course, newest first, grouped by month.
@@ -59,14 +61,28 @@ class CourseScreen extends StatelessWidget {
     );
   }
 
-  // Details of one lecture. In Part 3 tapping a lecture opens processing instead.
+  // Tap: not transcribed yet -> processing (06), otherwise the lecture (07-09).
   void openLecture(BuildContext context, Lecture lecture) {
+    Widget screen;
+    if (lecture.status == 'recorded' || lecture.status == 'transcribing') {
+      screen = ProcessingScreen(lecture: lecture);
+    } else {
+      screen = LectureScreen(lectureId: lecture.id);
+    }
+    Navigator.push(context, MaterialPageRoute(builder: (context) => screen));
+  }
+
+  // Long press: the details of one lecture, with Delete.
+  void showDetails(BuildContext context, Lecture lecture) {
     showModalBottomSheet(
       context: context,
       backgroundColor: Colors.white,
       builder: (sheetContext) {
         String audioText = 'Audio file not found on this phone';
-        if (lecture.audioPath != '' && File(lecture.audioPath).existsSync()) {
+        if (lecture.audioPath == '' && lecture.transcript != '') {
+          audioText = 'Audio deleted after transcription';
+        } else if (lecture.audioPath != '' &&
+            File(lecture.audioPath).existsSync()) {
           audioText = 'Audio on this phone · ${megabytes(lecture.audioBytes)}';
         }
 
@@ -98,11 +114,6 @@ class CourseScreen extends StatelessWidget {
               const SizedBox(height: 4),
               Text(audioText),
               const SizedBox(height: 16),
-              const Text(
-                'Transcription comes in Part 3.',
-                style: TextStyle(color: textGrey),
-              ),
-              const SizedBox(height: 16),
               OutlinedButton.icon(
                 style: OutlinedButton.styleFrom(foregroundColor: recordingRed),
                 icon: const Icon(Icons.delete_outline),
@@ -127,7 +138,13 @@ class CourseScreen extends StatelessWidget {
     Color background = const Color(0xFFFDF1D8);
     Color colour = const Color(0xFFA06A00);
 
-    if (status == 'ready') {
+    if (status == 'transcribing') {
+      text = 'Processing';
+    } else if (status == 'transcribed') {
+      text = 'Transcript';
+      background = primarySoft;
+      colour = primary;
+    } else if (status == 'ready') {
       text = 'Ready';
       background = const Color(0xFFE3F5EC);
       colour = success;
@@ -155,6 +172,7 @@ class CourseScreen extends StatelessWidget {
       child: InkWell(
         borderRadius: BorderRadius.circular(12),
         onTap: () => openLecture(context, lecture),
+        onLongPress: () => showDetails(context, lecture),
         child: Padding(
           padding: const EdgeInsets.all(16),
           child: Column(

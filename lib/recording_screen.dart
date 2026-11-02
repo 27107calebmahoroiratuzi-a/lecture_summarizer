@@ -8,6 +8,7 @@ import 'package:wakelock_plus/wakelock_plus.dart';
 
 import 'database.dart';
 import 'format.dart';
+import 'processing_screen.dart';
 import 'theme.dart';
 
 // Recording settings: mono speech audio, small files.
@@ -171,7 +172,7 @@ class _RecordingScreenState extends State<RecordingScreen> {
     }
 
     final bytes = await File(path).length();
-    saveLecture(
+    final lecture = saveLecture(
       course: widget.course,
       title: widget.title,
       date: widget.date,
@@ -184,8 +185,13 @@ class _RecordingScreenState extends State<RecordingScreen> {
     );
 
     if (!mounted) return;
-    showMessage('${widget.title} saved (${minutesText(seconds)})');
-    Navigator.pop(context);
+    // Straight on to transcription (screen 06).
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ProcessingScreen(lecture: lecture),
+      ),
+    );
   }
 
   void confirmCancel() {

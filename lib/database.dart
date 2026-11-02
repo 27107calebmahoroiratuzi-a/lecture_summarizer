@@ -65,6 +65,8 @@ class Lecture {
     required this.audioBytes,
     required this.lecturerAgreed,
     required this.classOnly,
+    this.transcript = '',
+    this.words = 0,
   });
 
   final String id;
@@ -72,11 +74,14 @@ class Lecture {
   final String title;
   final DateTime date;
   final int durationSeconds;
-  final String status; // 'recorded' now; Parts 3-4 add 'ready'
-  final String audioPath;
+  // 'recorded' -> 'transcribing' -> 'transcribed' (Part 3) -> 'ready' (Part 4)
+  final String status;
+  final String audioPath; // '' once the audio was deleted after transcription
   final int audioBytes;
   final bool lecturerAgreed;
   final bool classOnly;
+  final String transcript;
+  final int words;
 
   static Lecture fromDoc(DocumentSnapshot<Map<String, dynamic>> doc) {
     final data = doc.data() ?? {};
@@ -102,6 +107,8 @@ class Lecture {
       audioBytes: data['audioBytes'] ?? 0,
       lecturerAgreed: consent['lecturerAgreed'] ?? false,
       classOnly: consent['classOnly'] ?? false,
+      transcript: data['transcript'] ?? '',
+      words: data['words'] ?? 0,
     );
   }
 }
@@ -116,7 +123,8 @@ Query<Map<String, dynamic>> lecturesOf(Course course) {
 
 // Not awaited on purpose: Firestore keeps the write on the phone and uploads it
 // when there is internet, so saving still works in a lecture hall with no signal.
-void saveLecture({
+// Returns the new lecture, so the app can go straight to processing it.
+Lecture saveLecture({
   required Course course,
   required String title,
   required DateTime date,
@@ -127,7 +135,8 @@ void saveLecture({
   required bool classOnly,
   required bool imported,
 }) {
-  myLectures().add({
+  final doc = myLectures().doc(); // a new document with a new id
+  doc.set({
     'courseId': course.id,
     'title': title,
     'date': Timestamp.fromDate(date),
@@ -142,6 +151,34 @@ void saveLecture({
     'audioBytes': audioBytes,
     'imported': imported,
     'createdAt': FieldValue.serverTimestamp(),
+  });
+
+  return Lecture(
+    id: doc.id,
+    courseId: course.id,
+    title: title,
+    date: date,
+    durationSeconds: durationSeconds,
+    status: 'recorded',
+    audioPath: audioPath,
+    audioBytes: audioBytes,
+    lecturerAgreed: lecturerAgreed,
+    classOnly: classOnly,
+  );
+}
+
+void setStatus(Lecture lecture, String status) {
+  myLectures().doc(lecture.id).update({'status': status});
+}
+
+// Saves the transcript and forgets the audio file (it is deleted next).
+void saveTranscript(Lecture lecture, String transcript, int words) {
+  myLectures().doc(lecture.id).update({
+    'transcript': transcript,
+    'words': words,
+    'status': 'transcribed',
+    'audioPath': '',
+    'transcribedAt': FieldValue.serverTimestamp(),
   });
 }
 

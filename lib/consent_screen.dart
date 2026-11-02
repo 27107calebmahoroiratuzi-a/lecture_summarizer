@@ -7,6 +7,7 @@ import 'package:path_provider/path_provider.dart';
 
 import 'database.dart';
 import 'format.dart';
+import 'processing_screen.dart';
 import 'recording_screen.dart';
 import 'theme.dart';
 
@@ -143,7 +144,7 @@ class _ConsentScreenState extends State<ConsentScreen> {
         '${folder.path}/import_${DateTime.now().millisecondsSinceEpoch}_${picked.name}';
     await File(picked.path!).copy(newPath);
 
-    saveLecture(
+    final lecture = saveLecture(
       course: course!,
       title: titleController.text.trim(),
       date: date,
@@ -156,8 +157,12 @@ class _ConsentScreenState extends State<ConsentScreen> {
     );
 
     if (!mounted) return;
-    showMessage('Audio imported and saved');
-    Navigator.pop(context);
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ProcessingScreen(lecture: lecture),
+      ),
+    );
   }
 
   Widget label(String text) {

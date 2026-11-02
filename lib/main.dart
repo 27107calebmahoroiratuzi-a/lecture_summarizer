@@ -6,6 +6,14 @@ import 'home_screen.dart';
 import 'login_screen.dart';
 import 'theme.dart';
 
+// Lets any part of the app show a message, even after its screen was closed
+// (for example "The transcript is ready").
+final messengerKey = GlobalKey<ScaffoldMessengerState>();
+
+void showAppMessage(String message) {
+  messengerKey.currentState?.showSnackBar(SnackBar(content: Text(message)));
+}
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
@@ -20,6 +28,7 @@ class LectureApp extends StatelessWidget {
     return MaterialApp(
       title: 'Lecture Summariser',
       debugShowCheckedModeBanner: false,
+      scaffoldMessengerKey: messengerKey,
       theme: appTheme(),
       home: const AuthGate(),
     );
