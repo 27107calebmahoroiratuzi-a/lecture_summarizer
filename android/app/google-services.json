@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "208629676005",
+    "project_id": "lecture-summarizer-9cd3e",
+    "storage_bucket": "lecture-summarizer-9cd3e.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:208629676005:android:dc30be86672f05346fa10c",
+        "android_client_info": {
+          "package_name": "com.example.lecture_summarizer"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAxsL9agjUTuE9soMEU8BphLlAsfUsPIwY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
