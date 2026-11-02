@@ -119,8 +119,12 @@ class _LoginScreenState extends State<LoginScreen> {
     super.dispose();
   }
 
-  Widget field(String label, TextEditingController controller,
-      {bool hidden = false, TextInputType type = TextInputType.text}) {
+  Widget field(
+    String label,
+    TextEditingController controller, {
+    bool hidden = false,
+    TextInputType type = TextInputType.text,
+  }) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 22),
       child: Column(
@@ -166,7 +170,11 @@ class _LoginScreenState extends State<LoginScreen> {
                       color: primary,
                       borderRadius: BorderRadius.circular(18),
                     ),
-                    child: const Icon(Icons.mic_none, color: Colors.white, size: 36),
+                    child: const Icon(
+                      Icons.mic_none,
+                      color: Colors.white,
+                      size: 36,
+                    ),
                   ),
                 ),
                 const SizedBox(height: 12),
@@ -183,12 +191,19 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
                 const SizedBox(height: 22),
                 if (creatingAccount) field('Name', nameController),
-                field('Email', emailController, type: TextInputType.emailAddress),
+                field(
+                  'Email',
+                  emailController,
+                  type: TextInputType.emailAddress,
+                ),
                 field('Password', passwordController, hidden: true),
                 if (error != '')
                   Padding(
                     padding: const EdgeInsets.only(bottom: 12),
-                    child: Text(error, style: const TextStyle(color: recordingRed)),
+                    child: Text(
+                      error,
+                      style: const TextStyle(color: recordingRed),
+                    ),
                   ),
                 FilledButton(
                   onPressed: busy ? null : submit,

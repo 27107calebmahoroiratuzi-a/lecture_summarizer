@@ -35,7 +35,10 @@ class ProfileScreen extends StatelessWidget {
                   backgroundColor: primarySoft,
                   child: Text(
                     initialsOf(name),
-                    style: const TextStyle(color: primary, fontWeight: FontWeight.bold),
+                    style: const TextStyle(
+                      color: primary,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
                 title: Text(

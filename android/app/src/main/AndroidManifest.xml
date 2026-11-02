@@ -1,4 +1,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Part 2: record lectures with the microphone -->
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <!-- Firebase and Gemini need the internet (also in release builds) -->
+    <uses-permission android:name="android.permission.INTERNET" />
     <application
         android:label="lecture_summarizer"
         android:name="${applicationName}"

@@ -15,9 +15,8 @@ class CourseScreen extends StatelessWidget {
   final Course course;
 
   void showMessage(BuildContext context, String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(message)),
-    );
+    ScaffoldMessenger.of(context)
+        .showSnackBar(SnackBar(content: Text(message)));
   }
 
   Future<void> confirmDelete(BuildContext context) async {
@@ -84,7 +83,10 @@ class CourseScreen extends StatelessWidget {
             children: [
               Text(
                 lecture.title,
-                style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+                style: const TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
               const SizedBox(height: 8),
               Text(
@@ -139,7 +141,11 @@ class CourseScreen extends StatelessWidget {
       ),
       child: Text(
         text,
-        style: TextStyle(color: colour, fontSize: 12, fontWeight: FontWeight.w600),
+        style: TextStyle(
+          color: colour,
+          fontSize: 12,
+          fontWeight: FontWeight.w600,
+        ),
       ),
     );
   }
@@ -159,7 +165,10 @@ class CourseScreen extends StatelessWidget {
                   Expanded(
                     child: Text(
                       lecture.title,
-                      style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
                   ),
                   const SizedBox(width: 8),
@@ -226,7 +235,9 @@ class CourseScreen extends StatelessWidget {
         stream: lecturesOf(course).snapshots(),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
-            return Center(child: Text('Could not load the lectures.\n${snapshot.error}'));
+            return Center(
+              child: Text('Could not load the lectures.\n${snapshot.error}'),
+            );
           }
           if (!snapshot.hasData) {
             return const Center(child: CircularProgressIndicator());
@@ -259,10 +270,12 @@ class CourseScreen extends StatelessWidget {
               items.add(monthText(lecture.date));
               lastMonth = month;
             }
-            items.add(Padding(
-              padding: const EdgeInsets.only(bottom: 14),
-              child: lectureCard(context, lecture),
-            ));
+            items.add(
+              Padding(
+                padding: const EdgeInsets.only(bottom: 14),
+                child: lectureCard(context, lecture),
+              ),
+            );
           }
           items.add(const SizedBox(height: 80)); // room for the button
 

@@ -42,9 +42,8 @@ class _ConsentScreenState extends State<ConsentScreen> {
   }
 
   void showMessage(String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(message)),
-    );
+    ScaffoldMessenger.of(context)
+        .showSnackBar(SnackBar(content: Text(message)));
   }
 
   Future<void> pickDate() async {
@@ -123,10 +122,13 @@ class _ConsentScreenState extends State<ConsentScreen> {
       return; // the user closed the picker
     }
     final picked = files[0];
+    final size = await File(picked.path!).length();
 
-    if (picked.size > maxAudioBytes) {
-      showMessage('This file is ${megabytes(picked.size)}. '
-          'The limit is ${megabytes(maxAudioBytes)} (about one hour).');
+    if (size > maxAudioBytes) {
+      showMessage(
+        'This file is ${megabytes(size)}. '
+        'The limit is ${megabytes(maxAudioBytes)} (about one hour).',
+      );
       return;
     }
 
@@ -137,7 +139,8 @@ class _ConsentScreenState extends State<ConsentScreen> {
     // Copy the file into the app's own folder, so it is not lost if the
     // picker's temporary copy is cleaned up.
     final folder = await getApplicationDocumentsDirectory();
-    final newPath = '${folder.path}/import_${DateTime.now().millisecondsSinceEpoch}_${picked.name}';
+    final newPath =
+        '${folder.path}/import_${DateTime.now().millisecondsSinceEpoch}_${picked.name}';
     await File(picked.path!).copy(newPath);
 
     saveLecture(
@@ -146,7 +149,7 @@ class _ConsentScreenState extends State<ConsentScreen> {
       date: date,
       durationSeconds: 0,
       audioPath: newPath,
-      audioBytes: picked.size,
+      audioBytes: size,
       lecturerAgreed: lecturerAgreed,
       classOnly: classOnly,
       imported: true,
@@ -290,13 +293,17 @@ class _ConsentScreenState extends State<ConsentScreen> {
               FilledButton.icon(
                 style: FilledButton.styleFrom(backgroundColor: recordingRed),
                 // Disabled (null) until both consent boxes are ticked.
-                onPressed: consentGiven && !busy ? () => startRecording(course) : null,
+                onPressed: consentGiven && !busy
+                    ? () => startRecording(course)
+                    : null,
                 icon: const Icon(Icons.fiber_manual_record, size: 16),
                 label: const Text('Start recording'),
               ),
               const SizedBox(height: 8),
               TextButton.icon(
-                onPressed: consentGiven && !busy ? () => importAudio(course) : null,
+                onPressed: consentGiven && !busy
+                    ? () => importAudio(course)
+                    : null,
                 icon: const Icon(Icons.upload_file),
                 label: const Text('Import an audio file instead'),
               ),

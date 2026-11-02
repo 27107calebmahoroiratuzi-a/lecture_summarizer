@@ -151,7 +151,9 @@ Future<void> deleteLecture(Lecture lecture) async {
   if (lecture.audioPath != '' && await file.exists()) {
     await file.delete();
   }
-  myLectures().doc(lecture.id).delete(); // not awaited, same reason as saveLecture
+  myLectures()
+      .doc(lecture.id)
+      .delete(); // not awaited, same reason as saveLecture
 }
 
 // "Mobile Programming" -> "MP", "Networks" -> "NE"
